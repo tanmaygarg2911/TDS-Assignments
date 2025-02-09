@@ -22,7 +22,10 @@ jobs:
           git config --global user.email "22f2001630@ds.study.iitm.ac.in"
 
       - name: Commit and push changes
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          git remote set-url origin https://$GH_PAT@github.com/${{ github.repository }}.git
           git add last_run.txt
           git commit -m "Daily commit - $(date)"
-          git push
+          git push origin main
