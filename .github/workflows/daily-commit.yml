@@ -26,6 +26,8 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git remote set-url origin https://$GH_PAT@github.com/${{ github.repository }}.git
+          git branch -M main  # Ensure we are on the correct branch
+          git pull origin main  # Pull latest changes to prevent conflicts
           git add last_run.txt
           git commit -m "Daily commit - $(date)"
           git push origin main
