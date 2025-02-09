@@ -8,26 +8,20 @@ on:
 jobs:
   commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update last run timestamp
+      - name: Generate timestamp file
         run: echo "$(date)" > last_run.txt
 
-      - name: Configure Git
+      - name: Commit changes (22f2001630@ds.study.iitm.ac.in)
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "22f2001630@ds.study.iitm.ac.in"
-
-      - name: Commit and push changes
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          git remote set-url origin https://$GH_PAT@github.com/${{ github.repository }}.git
-          git branch -M main  # Ensure we are on the correct branch
-          git pull origin main  # Pull latest changes to prevent conflicts
+          git config --local user.name "GitHub Actions Bot"
+          git config --local user.email "22f2001630@ds.study.iitm.ac.in"
           git add last_run.txt
-          git commit -m "Daily commit - $(date)"
-          git push origin main
+          git commit -m "Automated commit: $(date)" || exit 0
+          git push
